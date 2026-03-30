@@ -12,7 +12,11 @@ app.include_router(jobs_router, prefix="/api")
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    if isinstance(exc.detail, dict) and "error" in exc.detail and "detail" in exc.detail:
+    if (
+        isinstance(exc.detail, dict)
+        and "error" in exc.detail
+        and "detail" in exc.detail
+    ):
         return JSONResponse(status_code=exc.status_code, content=exc.detail)
 
     if exc.status_code == status.HTTP_401_UNAUTHORIZED:

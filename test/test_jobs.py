@@ -28,16 +28,20 @@ class MockSupabase:
 @pytest.fixture(autouse=True)
 def reset_jobs():
     mock_jobs.clear()
-    mock_jobs.extend([
-        {"id": 1, "title": "Job 1", "description": "Desc 1", "user_id": "user-1"},
-        {"id": 2, "title": "Job 2", "description": "Desc 2", "user_id": "user-1"},
-        {"id": 3, "title": "Job 3", "description": "Desc 3", "user_id": "user-2"},
-    ])
+    mock_jobs.extend(
+        [
+            {"id": 1, "title": "Job 1", "description": "Desc 1", "user_id": "user-1"},
+            {"id": 2, "title": "Job 2", "description": "Desc 2", "user_id": "user-1"},
+            {"id": 3, "title": "Job 3", "description": "Desc 3", "user_id": "user-2"},
+        ]
+    )
     yield
 
 
 def test_user_can_get_own_jobs(monkeypatch):
-    monkeypatch.setattr(auth_dep, "supabase", MockSupabase(SimpleNamespace(id="user-1")))
+    monkeypatch.setattr(
+        auth_dep, "supabase", MockSupabase(SimpleNamespace(id="user-1"))
+    )
 
     response = client.get(
         "/api/jobs",
@@ -49,7 +53,9 @@ def test_user_can_get_own_jobs(monkeypatch):
 
 
 def test_user_cannot_access_other_user_job(monkeypatch):
-    monkeypatch.setattr(auth_dep, "supabase", MockSupabase(SimpleNamespace(id="user-1")))
+    monkeypatch.setattr(
+        auth_dep, "supabase", MockSupabase(SimpleNamespace(id="user-1"))
+    )
 
     response = client.get(
         "/api/jobs/3",
